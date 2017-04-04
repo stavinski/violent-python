@@ -1,0 +1,3 @@
+root:!:17227:0:99999:7:::
+mysql:!:17256:0:99999:7:::
+weak_password:$6$QuMWasfe$frsb1h6u4CUWafjXYIvZuX9ZT5I.r6O6f9tsIL4U1TCDS1JO8ACfyshH.W8F7.fS.G3B.dyX88fecLAhveuFd0:17260:0:99999:7:::
