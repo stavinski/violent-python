@@ -36,6 +36,9 @@ def crack_password(password_file, algo, salt, password):
         print "*" * 60
         print "[*] cracked password => [%s]" % pwd
         print "*" * 60
+        return
+    
+    print "[-] could not crack password :("
 
 def main(password_file, username):
   password = get_password(username)
