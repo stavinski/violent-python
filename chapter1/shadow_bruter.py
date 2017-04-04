@@ -43,7 +43,15 @@ def main(password_file, username):
   if password is None:
     print "[!] could not find [%s]" % username
     exit(0)
-    
+  
+  if password == "*":
+    print "[!] username does not have password to crack"
+    exit(0)
+  
+  if password == "!":
+    print "[!] password retrieved could not be cracked"
+    exit(0)
+  
   _, algo, salt, password = password.split("$")
   
   
