@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 
 from argparse import ArgumentParser
@@ -51,13 +53,14 @@ def print_calls(conn):
     
 def print_messages(conn):
     cur  = conn.cursor()
-    cur.execute("select datetime(timestamp, 'unixepoch') as time, dialog_partner, author, body_xml from messages;")
+    cur.execute("select datetime(timestamp, 'unixepoch') as time, dialog_partner, author, body_xml from messages order by time;")
     
     print "[*] found messages"
     for row in cur:
         print "[+] time: %s" % row["time"]
         print "[+] partner: %s" % row["dialog_partner"]
         print "[+] author: %s" % row["author"]
+        #print "[+] message: %s" % row["body_xml"]
 
 def search_messages(conn, pattern):
     
