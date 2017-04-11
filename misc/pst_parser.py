@@ -186,7 +186,7 @@ class PSTRecordEntry:
         if PSTRecordEntry.entry_types.has_key(entry_type):
             return PSTRecordEntry.entry_types[entry_type]
         
-        return None
+        return hex(entry_type)
     
     
     def get_value(self):
@@ -198,7 +198,7 @@ class PSTRecordEntry:
             func = PSTRecordEntry.value_type_funcs[val_type]
             return func(self.record_entry)
         
-        return None
+        return hex(val_type)
     
 def main(args):
     pff_file = pypff.file()
@@ -256,7 +256,7 @@ def main(args):
         
     if args.query is not None:
         found = 0
-        for index in range(0, number_of_messages):
+        for index in range(0, inbox_number_of_messages):
             msg = inbox.get_sub_message(index)
             sender = msg.get_sender_name()
             subject = msg.get_subject()
