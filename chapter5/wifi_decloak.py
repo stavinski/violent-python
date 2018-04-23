@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 
+# decloak hidden ssids
+
 import sys
 import threading
 
 from scapy.all import *
 
-probes = []
+hidden = set()
+unhidden = set()
+
 
 def channel_hopper(iface):
   channels = list(range(1, 14))
@@ -19,14 +23,21 @@ def channel_hopper(iface):
       print "[!] error channel hopping: %s" % e
 
 
-
 def pkt_mon(pkt):
-    if pkt.haslayer(Dot11ProbeReq):
-        netName = pkt.getlayer(Dot11ProbeReq).info
+    if pkt.haslayer(Dot11ProbeResp):
+      addr2 = pkt[Dot11].addr2
+      if addr2 in hidden and addr2 not in unhidden:
+        name = pkt[Dot11ProbeResp].info
+        print "[+] de-cloaked hidden ssid: %s -> %s" % (addr2, name)
+        unhidden.append(addr2)
 
-        if netName not in probes:
-            probes.append(netName)
-            print "[+] new probe: %s" % netName
+    if pkt.haslayer(Dot11Beacon):
+      if pkt[Dot11Beacon].info == "":
+        addr2 = pkt[Dot11].addr2
+        if addr2 not in hidden:
+          print "[-] detected hidden ssid: %s" % addr2
+          hidden.append(addr2)
+
 
 def main():
     if len(sys.argv) < 2:
@@ -40,7 +51,7 @@ def main():
     wt_channel_hopper.start()
 
     print "[*] monitoring on iface %s" % iface
-    sniff(prn=pkt_mon, iface=iface)
+    sniff(prn=pkt_mon, iface=iface, store=0)
 
 if __name__ == "__main__":
     main()
